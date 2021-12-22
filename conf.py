@@ -248,11 +248,6 @@ PAGES = (
     ("pages/*.txt", "pages", "page.tmpl"),
 )
 
-GITHUB_DEPLOY_BRANCH= "main"
-GITHUB_SOURCE_BRANCH= "src"
-GITHUB_REMOTE_NAME= "origin"
-GITHUB_COMMIT_SOURCE= True
-
 # Below this point, everything is optional
 
 # Post's dates are considered in UTC by default, if you want to use
@@ -681,7 +676,7 @@ REDIRECTIONS = []
 # https://getnikola.com/handbook.html#deploying-to-github
 # You will need to configure the deployment branch on GitHub.
 GITHUB_SOURCE_BRANCH = 'src'
-GITHUB_DEPLOY_BRANCH = 'master'
+GITHUB_DEPLOY_BRANCH = 'main'
 
 # The name of the remote where you wish to push to, using github_deploy.
 GITHUB_REMOTE_NAME = 'origin'
