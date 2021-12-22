@@ -15,7 +15,7 @@ How to do convolutions with doubly blocked Toeplitz matrices
 
 A few weeks ago, Jamie (@neworderofjamie) asked me on the chat whether I knew what doubly blocked Toeplitz matrices are and how they implement convolutions. I had no clue. Since then we have implemented convolutions using doubly blocked Toeplitz matrices in GeNN and found them to be extremely useful and efficient.
 1
-In this software blog I will give a brief overview on the why and how convolutions relate to doubly blocked Toeplitz matrices. My blog is based on \cite{Salehi2018} but updated to use machine-learning rather than signal-processing conventions and I am trying to avoid using too many unusual ways of re-arranging rows and columns.
+In this software blog I will give a brief overview on the why and how convolutions relate to doubly blocked Toeplitz matrices. My blog is based on Ali Salehi's tutorial [Convolution as Matrix Multiplication]({https://raw.githubusercontent.com/alisaaalehi/convolution_as_multiplication/master/ConvAsMulExplained.pdf)  but updated to use machine-learning rather than signal-processing conventions and I am trying to avoid using too many unusual ways of re-arranging rows and columns.
 
 The why
 ---
