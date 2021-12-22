@@ -23,7 +23,7 @@ BLOG_TITLE = "GeNN"  # (translatable)
 SITE_URL = "http://genn-team.github.io/"
 # This is the URL where Nikola's output will be deployed.
 # If not set, defaults to SITE_URL
-# BASE_URL = "http://genn-team.github.io/genn/"
+# BASE_URL = "http://genn-team.github.io/"
 BLOG_EMAIL = "t.nowotny@sussex.ac.uk"
 BLOG_DESCRIPTION = "Welcome to GeNN"  # (translatable)
 
