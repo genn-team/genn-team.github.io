@@ -277,12 +277,6 @@ def convolution(I, K, verbose= False):
     if verbose: 
         print('R as matrix= \n', R)
     return R
-
-# kernel
-K= np.array([[10,20],[30,40]])
-# layer
-I= np.array([[1,2,3],[4,5,6]])
-R= convolution(I, K, verbose= True)
 ```
 
 To test, one can, for instance, use
@@ -291,7 +285,7 @@ To test, one can, for instance, use
 K= np.array([[10,20],[30,40]])
 # layer
 I= np.array([[1,2,3],[4,5,6]])
-convolution(I, K, verbose= True)
+R= convolution(I, K, verbose= True)
 ```
 
 The output would then be

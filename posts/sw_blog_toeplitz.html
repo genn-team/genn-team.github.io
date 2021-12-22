@@ -320,19 +320,13 @@ is then given by multiplying F from the left onto \(I_\text{col}\) as defined ab
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> 
         <span class="nb">print</span><span class="p">(</span><span class="s1">'R as matrix= </span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">R</span>
-
-<span class="c1"># kernel</span>
-<span class="n">K</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">],[</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">]])</span>
-<span class="c1"># layer</span>
-<span class="n">I</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span>
-<span class="n">R</span><span class="o">=</span> <span class="n">convolution</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 </pre>
 <p>To test, one can, for instance, use</p>
 <pre class="code literal-block"><span class="c1"># kernel</span>
 <span class="n">K</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">],[</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">]])</span>
 <span class="c1"># layer</span>
 <span class="n">I</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span>
-<span class="n">convolution</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">R</span><span class="o">=</span> <span class="n">convolution</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 </pre>
 <p>The output would then be</p>
 <pre class="code literal-block"><span></span><code>padded kernel= 
