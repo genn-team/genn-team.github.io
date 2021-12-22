@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Architects Daughter'; 
+    src: url('https://fonts.gstatic.com/s/architectsdaughter/v11/KtkxAKiDZI_td1Lkx62xHZHDtgO_Y-bvTYlg4-7jA-U.woff2'); /*URL to the font*/
+}
+
+span.blog-title {
+  color: rgba(186.0, 2.0, 0.0, 1);
+  font-family: 'Architects Daughter';
+}
