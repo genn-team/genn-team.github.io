@@ -1,4 +1,4 @@
-Sitemap: http://genn-team.github.io/genn/sitemapindex.xml
+Sitemap: http://genn-team.github.io/sitemapindex.xml
 
 User-Agent: *
 Host: genn-team.github.io
