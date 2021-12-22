@@ -248,10 +248,10 @@ PAGES = (
     ("pages/*.txt", "pages", "page.tmpl"),
 )
 
-#GITHUB_DEPLOY_BRANCH= "gh-pages"
-#GITHUB_SOURCE_BRANCH= "nikola-src"
-#GITHUB_REMOTE_NAME= ""
-#GITHUB_COMMIT_SOURCE= True
+GITHUB_DEPLOY_BRANCH= "main"
+GITHUB_SOURCE_BRANCH= "src"
+GITHUB_REMOTE_NAME= "origin"
+GITHUB_COMMIT_SOURCE= True
 
 # Below this point, everything is optional
 
