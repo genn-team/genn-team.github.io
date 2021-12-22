@@ -221,6 +221,141 @@ Finally, \\(R_{\text{col}}\\) can be reinterpreted as the output matrix \\(R\\) 
 
 There we have it - convolution (in the machine learning sense, i.e. corss-correlation) of a kernel \\(K\\) with a layer \\(I\\) expressed as the product of a doubly blocked Toeplitz matrix derived from \\(K\\) with the column vector of the row-wise unrolled entries from \\(I\\).
 
+The following python function is a simple implementation of this method
+```python
+import numpy as np
+from scipy.linalg import toeplitz
+
+def convolution(I, K, verbose= False):
+    # flip the kernel
+    K= np.fliplr(np.flipud(K))
+    # calculate sizes
+    K_row_num, K_col_num= K.shape
+    I_row_num, I_col_num= I.shape
+    R_row_num= K_row_num+I_row_num-1
+    R_col_num= K_col_num+I_col_num-1
+    # pad the kernel
+    K_pad= np.pad(K, ((0,R_row_num - K_row_num),
+                      (0,R_col_num - K_col_num)), 
+                  'constant', constant_values= 0)
+    if verbose:
+        print("padded kernel= \n", K_pad)
+    # Assemble the list of Toeplitz matrices F_i
+    toeplitz_list= []
+    for i in range(R_row_num):
+        c= K_pad[i,:]
+        r= np.r_[c[0],np.zeros(I_col_num-1)]
+        toeplitz_list.append(toeplitz(c,r).copy())
+    if verbose:
+        print("Toeplitz list= \n", toeplitz_list)
+    # make a matrix with the indices of the block F_i 
+    # of the doubly blocked Toeplitz matrix
+    c = np.array(range(R_row_num))
+    r = np.r_[c[0], c[-1:1:-1]]
+    doubly_indices = np.array(toeplitz(c,r).copy())
+    if verbose:
+        print("doubly_indices= \n", doubly_indices)
+    # assemble the doubly blocked toeplitz matrix
+    toeplitz_m= []
+    for i in range(R_row_num):
+        row= []
+        for j in range(I_row_num):
+            row.append(toeplitz_list[doubly_indices[i,j]])
+        row=np.hstack(row)
+        toeplitz_m.append(row)
+    toeplitz_m= np.vstack(toeplitz_m)
+    if verbose:
+        print("Toeplitz matrix= \n",toeplitz_m)
+    # make layer into column vector
+    I_col= I.flatten()
+    if verbose:
+        print("I_col= ", I_col)
+    R = np.matmul(toeplitz_m, I_col)
+    if verbose:
+        print('R as vector= \n', R)
+    R= R.reshape(R_row_num, R_col_num)
+    if verbose: 
+        print('R as matrix= \n', R)
+    return R
+
+# kernel
+K= np.array([[10,20],[30,40]])
+# layer
+I= np.array([[1,2,3],[4,5,6]])
+R= convolution(I, K, verbose= True)
+```
+
+To test, one can, for instance, use
+```python
+# kernel
+K= np.array([[10,20],[30,40]])
+# layer
+I= np.array([[1,2,3],[4,5,6]])
+convolution(I, K, verbose= True)
+```
+
+The output would then be
+```
+padded kernel= 
+ [[40 30  0  0]
+ [20 10  0  0]
+ [ 0  0  0  0]]
+Toeplitz list= 
+ [array([[40.,  0.,  0.],
+       [30., 40.,  0.],
+       [ 0., 30., 40.],
+       [ 0.,  0., 30.]]), array([[20.,  0.,  0.],
+       [10., 20.,  0.],
+       [ 0., 10., 20.],
+       [ 0.,  0., 10.]]), array([[0., 0., 0.],
+       [0., 0., 0.],
+       [0., 0., 0.],
+       [0., 0., 0.]])]
+doubly_indices= 
+ [[0 2]
+ [1 0]
+ [2 1]]
+Toeplitz matrix= 
+ [[40.  0.  0.  0.  0.  0.]
+ [30. 40.  0.  0.  0.  0.]
+ [ 0. 30. 40.  0.  0.  0.]
+ [ 0.  0. 30.  0.  0.  0.]
+ [20.  0.  0. 40.  0.  0.]
+ [10. 20.  0. 30. 40.  0.]
+ [ 0. 10. 20.  0. 30. 40.]
+ [ 0.  0. 10.  0.  0. 30.]
+ [ 0.  0.  0. 20.  0.  0.]
+ [ 0.  0.  0. 10. 20.  0.]
+ [ 0.  0.  0.  0. 10. 20.]
+ [ 0.  0.  0.  0.  0. 10.]]
+I_col=  [1 2 3 4 5 6]
+R as vector= 
+ [ 40. 110. 180.  90. 180. 370. 470. 210.  80. 140. 170.  60.]
+R as matrix= 
+ [[ 40. 110. 180.  90.]
+ [180. 370. 470. 210.]
+ [ 80. 140. 170.  60.]]
+```
+
+Note, that this is example is inspired by [Salehi's tutorial]() but because we are calculating the machine learning covolution (cross-correlation) and Salehi the mathematical convolution as used in signal processing, the results are not the same. To generate identical results one can use the doubly flipped kernel,
+```python
+# kernel
+K= np.array([[40,30],[20,10]])
+# layer
+I= np.array([[1,2,3],[4,5,6]])
+R= convolution(I, K, verbose= False)
+print("R= \n", R)
+```
+ and obtain
+ 
+```python
+ R= 
+ [[ 10.  40.  70.  60.]
+ [ 70. 230. 330. 240.]
+ [120. 310. 380. 240.]]
+```
+which exactly is Salehi's result.
+
 [^1]: Convolution images created with software from:
 Vincent Dumoulin and Francesco Visin, A guide to convolution arithmetic for deep learning (2016) ArXiv e-prints 1603.07285; [Software on github](https://github.com/vdumoulin/conv_arithmetic)
 

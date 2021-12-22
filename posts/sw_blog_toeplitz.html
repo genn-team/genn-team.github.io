@@ -265,6 +265,134 @@ is then given by multiplying F from the left onto \(I_\text{col}\) as defined ab
   \]</p>
 <p>Finally, \(R_{\text{col}}\) can be reinterpreted as the output matrix \(R\) by arranging its entries row-wise in a \(4\times 4\) matrix.</p>
 <p>There we have it - convolution (in the machine learning sense, i.e. corss-correlation) of a kernel \(K\) with a layer \(I\) expressed as the product of a doubly blocked Toeplitz matrix derived from \(K\) with the column vector of the row-wise unrolled entries from \(I\).</p>
+<p>The following python function is a simple implementation of this method</p>
+<pre class="code literal-block"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">toeplitz</span>
+
+<span class="k">def</span> <span class="nf">convolution</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># flip the kernel</span>
+    <span class="n">K</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">K</span><span class="p">))</span>
+    <span class="c1"># calculate sizes</span>
+    <span class="n">K_row_num</span><span class="p">,</span> <span class="n">K_col_num</span><span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">I_row_num</span><span class="p">,</span> <span class="n">I_col_num</span><span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">R_row_num</span><span class="o">=</span> <span class="n">K_row_num</span><span class="o">+</span><span class="n">I_row_num</span><span class="o">-</span><span class="mi">1</span>
+    <span class="n">R_col_num</span><span class="o">=</span> <span class="n">K_col_num</span><span class="o">+</span><span class="n">I_col_num</span><span class="o">-</span><span class="mi">1</span>
+    <span class="c1"># pad the kernel</span>
+    <span class="n">K_pad</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="n">R_row_num</span> <span class="o">-</span> <span class="n">K_row_num</span><span class="p">),</span>
+                      <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">R_col_num</span> <span class="o">-</span> <span class="n">K_col_num</span><span class="p">)),</span> 
+                  <span class="s1">'constant'</span><span class="p">,</span> <span class="n">constant_values</span><span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"padded kernel= </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">K_pad</span><span class="p">)</span>
+    <span class="c1"># Assemble the list of Toeplitz matrices F_i</span>
+    <span class="n">toeplitz_list</span><span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">R_row_num</span><span class="p">):</span>
+        <span class="n">c</span><span class="o">=</span> <span class="n">K_pad</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span>
+        <span class="n">r</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">I_col_num</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">toeplitz_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">toeplitz</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Toeplitz list= </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">toeplitz_list</span><span class="p">)</span>
+    <span class="c1"># make a matrix with the indices of the block F_i </span>
+    <span class="c1"># of the doubly blocked Toeplitz matrix</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">R_row_num</span><span class="p">))</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">doubly_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">toeplitz</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"doubly_indices= </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">doubly_indices</span><span class="p">)</span>
+    <span class="c1"># assemble the doubly blocked toeplitz matrix</span>
+    <span class="n">toeplitz_m</span><span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">R_row_num</span><span class="p">):</span>
+        <span class="n">row</span><span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">I_row_num</span><span class="p">):</span>
+            <span class="n">row</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">toeplitz_list</span><span class="p">[</span><span class="n">doubly_indices</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]])</span>
+        <span class="n">row</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+        <span class="n">toeplitz_m</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+    <span class="n">toeplitz_m</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">toeplitz_m</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Toeplitz matrix= </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="n">toeplitz_m</span><span class="p">)</span>
+    <span class="c1"># make layer into column vector</span>
+    <span class="n">I_col</span><span class="o">=</span> <span class="n">I</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"I_col= "</span><span class="p">,</span> <span class="n">I_col</span><span class="p">)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">toeplitz_m</span><span class="p">,</span> <span class="n">I_col</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">'R as vector= </span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+    <span class="n">R</span><span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">R_row_num</span><span class="p">,</span> <span class="n">R_col_num</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s1">'R as matrix= </span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">R</span>
+
+<span class="c1"># kernel</span>
+<span class="n">K</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">],[</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">]])</span>
+<span class="c1"># layer</span>
+<span class="n">I</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span>
+<span class="n">R</span><span class="o">=</span> <span class="n">convolution</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre>
+<p>To test, one can, for instance, use</p>
+<pre class="code literal-block"><span class="c1"># kernel</span>
+<span class="n">K</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">],[</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">]])</span>
+<span class="c1"># layer</span>
+<span class="n">I</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span>
+<span class="n">convolution</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre>
+<p>The output would then be</p>
+<pre class="code literal-block"><span></span><code>padded kernel= 
+ [[40 30  0  0]
+ [20 10  0  0]
+ [ 0  0  0  0]]
+Toeplitz list= 
+ [array([[40.,  0.,  0.],
+       [30., 40.,  0.],
+       [ 0., 30., 40.],
+       [ 0.,  0., 30.]]), array([[20.,  0.,  0.],
+       [10., 20.,  0.],
+       [ 0., 10., 20.],
+       [ 0.,  0., 10.]]), array([[0., 0., 0.],
+       [0., 0., 0.],
+       [0., 0., 0.],
+       [0., 0., 0.]])]
+doubly_indices= 
+ [[0 2]
+ [1 0]
+ [2 1]]
+Toeplitz matrix= 
+ [[40.  0.  0.  0.  0.  0.]
+ [30. 40.  0.  0.  0.  0.]
+ [ 0. 30. 40.  0.  0.  0.]
+ [ 0.  0. 30.  0.  0.  0.]
+ [20.  0.  0. 40.  0.  0.]
+ [10. 20.  0. 30. 40.  0.]
+ [ 0. 10. 20.  0. 30. 40.]
+ [ 0.  0. 10.  0.  0. 30.]
+ [ 0.  0.  0. 20.  0.  0.]
+ [ 0.  0.  0. 10. 20.  0.]
+ [ 0.  0.  0.  0. 10. 20.]
+ [ 0.  0.  0.  0.  0. 10.]]
+I_col=  [1 2 3 4 5 6]
+R as vector= 
+ [ 40. 110. 180.  90. 180. 370. 470. 210.  80. 140. 170.  60.]
+R as matrix= 
+ [[ 40. 110. 180.  90.]
+ [180. 370. 470. 210.]
+ [ 80. 140. 170.  60.]]
+</code></pre>
+
+<p>Note, that this is example is inspired by <a href="#">Salehi's tutorial</a> but because we are calculating the machine learning covolution (cross-correlation) and Salehi the mathematical convolution as used in signal processing, the results are not the same. To generate identical results one can use the doubly flipped kernel,</p>
+<pre class="code literal-block"><span></span><code><span class="c1"># kernel</span>
+<span class="n">K</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">40</span><span class="p">,</span><span class="mi">30</span><span class="p">],[</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">]])</span>
+<span class="c1"># layer</span>
+<span class="n">I</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span>
+<span class="n">R</span><span class="o">=</span> <span class="n">convolution</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"R= </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+</code></pre>
+
+<p>and obtain</p>
+<pre class="code literal-block"><span></span><code> <span class="n">R</span><span class="o">=</span> 
+ <span class="p">[[</span> <span class="mf">10.</span>  <span class="mf">40.</span>  <span class="mf">70.</span>  <span class="mf">60.</span><span class="p">]</span>
+ <span class="p">[</span> <span class="mf">70.</span> <span class="mf">230.</span> <span class="mf">330.</span> <span class="mf">240.</span><span class="p">]</span>
+ <span class="p">[</span><span class="mf">120.</span> <span class="mf">310.</span> <span class="mf">380.</span> <span class="mf">240.</span><span class="p">]]</span>
+</code></pre>
+
+<p>which exactly is Salehi's result.</p>
 <div class="footnote">
 <hr>
 <ol>
