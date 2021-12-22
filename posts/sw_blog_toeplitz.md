@@ -331,7 +331,7 @@ R as matrix=
  [ 80. 140. 170.  60.]]
 ```
 
-Note, that this is example is inspired by [Salehi's tutorial]() but because we are calculating the machine learning covolution (cross-correlation) and Salehi the mathematical convolution as used in signal processing, the results are not the same. To generate identical results one can use the doubly flipped kernel,
+Note, that this example is inspired by [Salehi's tutorial]() but because we are calculating the machine learning covolution (cross-correlation) and Salehi the mathematical convolution as used in signal processing, the results are not the same. To generate identical results one can use the doubly flipped kernel,
 ```python
 # kernel
 K= np.array([[40,30],[20,10]])
