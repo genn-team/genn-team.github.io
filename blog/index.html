@@ -55,8 +55,7 @@
             <span class="post-date dateline"><time class="published dt-published" datetime="2021-12-21T14:39:44Z" title="2021-12-21 14:39">2021-12-21 14:39</time></span>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<h2>How to do convolutions with doubly blocked Toeplitz matrices</h2>
+    <h2>How to do convolutions with doubly blocked Toeplitz matrices</h2>
 <p>A few weeks ago, Jamie (@neworderofjamie) asked me on the chat whether I knew what doubly blocked Toeplitz matrices are and how they implement convolutions. I had no clue. Since then we have implemented convolutions using doubly blocked Toeplitz matrices in GeNN and found them to be extremely useful and efficient.
 1
 In this software blog I will give a brief overview on the why and how convolutions relate to doubly blocked Toeplitz matrices. My blog is based on Ali Salehi's tutorial <a href="https://raw.githubusercontent.com/alisaaalehi/convolution_as_multiplication/master/ConvAsMulExplained.pdf">Convolution as Matrix Multiplication</a>  but updated to use machine-learning rather than signal-processing conventions and I am trying to avoid using too many unusual ways of re-arranging rows and columns.</p>
@@ -86,10 +85,10 @@ Then the convolution in the machine learning use of the term is calculating the 
 <th align="center"><img alt="Illustration of convolution step" src="../images/blog_03.png"></th>
 </tr></thead>
 <tbody><tr>
-<td align="center">\(r_{11}\)</td>
-<td align="center">\(r_{12}\)</td>
-<td align="center">\(r_{13}\)</td>
-<td align="center">\(3_{14}\)</td>
+<td align="center">\(r_</td>
+<td align="center">\(r_</td>
+<td align="center">\(r_</td>
+<td align="center">\(3_</td>
 </tr></tbody>
 </table>
 <p>For the first non-zero entry at \((1,1)\) of the result matrix \(R\), we therefore have \(r_{11} = k_{22} i_{11}\).
@@ -102,10 +101,10 @@ Then the kernel moves one over and \(r_{12} = k_{21}i_{11} + k_{22} i_{12}\). Th
 <th align="center"><img alt="Illustration of convolution step" src="../images/blog_07.png"></th>
 </tr></thead>
 <tbody><tr>
-<td align="center">\(r_{21}\)</td>
-<td align="center">\(r_{22}\)</td>
-<td align="center">\(r_{23}\)</td>
-<td align="center">\(r_{24}\)</td>
+<td align="center">\(r_</td>
+<td align="center">\(r_</td>
+<td align="center">\(r_</td>
+<td align="center">\(r_</td>
 </tr></tbody>
 </table>
 <p>So, for the second row,
@@ -320,6 +319,7 @@ is then given by multiplying F from the left onto \(I_\text{col}\) as defined ab
         <span class="nb">print</span><span class="p">(</span><span class="s1">'R as matrix= </span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">R</span>
 </pre>
+
 <p>To test, one can, for instance, use</p>
 <pre class="code literal-block"><span class="c1"># kernel</span>
 <span class="n">K</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">],[</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">]])</span>
@@ -327,47 +327,49 @@ is then given by multiplying F from the left onto \(I_\text{col}\) as defined ab
 <span class="n">I</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span>
 <span class="n">R</span><span class="o">=</span> <span class="n">convolution</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 </pre>
+
 <p>The output would then be</p>
-<pre class="code literal-block"><span></span><code>padded kernel= 
- [[40 30  0  0]
- [20 10  0  0]
- [ 0  0  0  0]]
-Toeplitz list= 
- [array([[40.,  0.,  0.],
-       [30., 40.,  0.],
-       [ 0., 30., 40.],
-       [ 0.,  0., 30.]]), array([[20.,  0.,  0.],
-       [10., 20.,  0.],
-       [ 0., 10., 20.],
-       [ 0.,  0., 10.]]), array([[0., 0., 0.],
-       [0., 0., 0.],
-       [0., 0., 0.],
-       [0., 0., 0.]])]
-doubly_indices= 
- [[0 2]
- [1 0]
- [2 1]]
-Toeplitz matrix= 
- [[40.  0.  0.  0.  0.  0.]
- [30. 40.  0.  0.  0.  0.]
- [ 0. 30. 40.  0.  0.  0.]
- [ 0.  0. 30.  0.  0.  0.]
- [20.  0.  0. 40.  0.  0.]
- [10. 20.  0. 30. 40.  0.]
- [ 0. 10. 20.  0. 30. 40.]
- [ 0.  0. 10.  0.  0. 30.]
- [ 0.  0.  0. 20.  0.  0.]
- [ 0.  0.  0. 10. 20.  0.]
- [ 0.  0.  0.  0. 10. 20.]
- [ 0.  0.  0.  0.  0. 10.]]
-I_col=  [1 2 3 4 5 6]
-R as vector= 
- [ 40. 110. 180.  90. 180. 370. 470. 210.  80. 140. 170.  60.]
-R as matrix= 
- [[ 40. 110. 180.  90.]
- [180. 370. 470. 210.]
- [ 80. 140. 170.  60.]]
+<pre class="code literal-block"><span></span><code><span class="err">padded kernel= </span>
+<span class="err"> [[40 30  0  0]</span>
+<span class="err"> [20 10  0  0]</span>
+<span class="err"> [ 0  0  0  0]]</span>
+<span class="err">Toeplitz list= </span>
+<span class="err"> [array([[40.,  0.,  0.],</span>
+<span class="err">       [30., 40.,  0.],</span>
+<span class="err">       [ 0., 30., 40.],</span>
+<span class="err">       [ 0.,  0., 30.]]), array([[20.,  0.,  0.],</span>
+<span class="err">       [10., 20.,  0.],</span>
+<span class="err">       [ 0., 10., 20.],</span>
+<span class="err">       [ 0.,  0., 10.]]), array([[0., 0., 0.],</span>
+<span class="err">       [0., 0., 0.],</span>
+<span class="err">       [0., 0., 0.],</span>
+<span class="err">       [0., 0., 0.]])]</span>
+<span class="err">doubly_indices= </span>
+<span class="err"> [[0 2]</span>
+<span class="err"> [1 0]</span>
+<span class="err"> [2 1]]</span>
+<span class="err">Toeplitz matrix= </span>
+<span class="err"> [[40.  0.  0.  0.  0.  0.]</span>
+<span class="err"> [30. 40.  0.  0.  0.  0.]</span>
+<span class="err"> [ 0. 30. 40.  0.  0.  0.]</span>
+<span class="err"> [ 0.  0. 30.  0.  0.  0.]</span>
+<span class="err"> [20.  0.  0. 40.  0.  0.]</span>
+<span class="err"> [10. 20.  0. 30. 40.  0.]</span>
+<span class="err"> [ 0. 10. 20.  0. 30. 40.]</span>
+<span class="err"> [ 0.  0. 10.  0.  0. 30.]</span>
+<span class="err"> [ 0.  0.  0. 20.  0.  0.]</span>
+<span class="err"> [ 0.  0.  0. 10. 20.  0.]</span>
+<span class="err"> [ 0.  0.  0.  0. 10. 20.]</span>
+<span class="err"> [ 0.  0.  0.  0.  0. 10.]]</span>
+<span class="err">I_col=  [1 2 3 4 5 6]</span>
+<span class="err">R as vector= </span>
+<span class="err"> [ 40. 110. 180.  90. 180. 370. 470. 210.  80. 140. 170.  60.]</span>
+<span class="err">R as matrix= </span>
+<span class="err"> [[ 40. 110. 180.  90.]</span>
+<span class="err"> [180. 370. 470. 210.]</span>
+<span class="err"> [ 80. 140. 170.  60.]]</span>
 </code></pre>
+
 
 <p>Note, that this example is inspired by <a href="https://raw.githubusercontent.com/alisaaalehi/convolution_as_multiplication/master/ConvAsMulExplained.pdf">Salehi's tutorial</a> but because we are calculating the machine learning covolution (cross-correlation) and Salehi the mathematical convolution as used in signal processing, the results are not the same. To generate identical results one can use the doubly flipped kernel,</p>
 <pre class="code literal-block"><span></span><code><span class="c1"># kernel</span>
@@ -378,12 +380,14 @@ R as matrix=
 <span class="nb">print</span><span class="p">(</span><span class="s2">"R= </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
 </code></pre>
 
+
 <p>and obtain</p>
 <pre class="code literal-block"><span></span><code> <span class="n">R</span><span class="o">=</span> 
  <span class="p">[[</span> <span class="mf">10.</span>  <span class="mf">40.</span>  <span class="mf">70.</span>  <span class="mf">60.</span><span class="p">]</span>
  <span class="p">[</span> <span class="mf">70.</span> <span class="mf">230.</span> <span class="mf">330.</span> <span class="mf">240.</span><span class="p">]</span>
  <span class="p">[</span><span class="mf">120.</span> <span class="mf">310.</span> <span class="mf">380.</span> <span class="mf">240.</span><span class="p">]]</span>
 </code></pre>
+
 
 <p>which exactly is Salehi's result.</p>
 <div class="footnote">
@@ -395,11 +399,11 @@ Vincent Dumoulin and Francesco Visin, A guide to convolution arithmetic for deep
 </li>
 </ol>
 </div>
-</div>
     </div>
     </article>
 </div>
 
+    
 
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-3lJUsx1TJHt7BA4udB5KPnDrlkO8T6J6v/op7ui0BbCjvZ9WqV4Xm6DTP6kQ/iBH" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
         MathJax.Hub.Config({tex2jax: {inlineMath: [['$latex ','$'], ['\\(','\\)']]}});
