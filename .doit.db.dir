@@ -103,7 +103,7 @@
 'copy_assets:output/assets/js/html5shiv-printshiv.min.js', (123904, 455)
 'scale_images:output/images/blog_08.png', (124416, 217)
 'render_sources:output/index.src.html', (124928, 239)
-'sitemap:output/sitemapindex.xml', (125440, 254)
+'sitemap:output/sitemapindex.xml', (125440, 255)
 'scale_images:output/images/blog_14.png', (125952, 217)
 'render_taxonomies:output/categories/convolution.html', (126464, 1471)
 'copy_assets:output/assets/js/gallery.min.js', (128000, 430)

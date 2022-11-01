@@ -65,7 +65,7 @@ arrays = [{"name": f"array_{i}", "size": 1000}
 print(template.render(arrays=arrays))
 ```
 
-On Linux, the C++ could then be built using the same command line used by GeNN itself (some options emitted for brevity) and timed using the ``/usr/bin/time`` (I recently discovered that ``command time`` can be used as an alternative way of disambiguating this from the bash builtin ``time``):
+On Linux, the C++ could then be built using the same command line used by GeNN itself (some options omitted for brevity) and timed using the ``/usr/bin/time`` (I recently discovered that ``command time`` can be used as an alternative way of disambiguating this from the bash builtin ``time``):
 ```bash
 /usr/bin/time -v nvcc -c -x cu -arch sm_86 -std=c++11 test.cc
 ```
@@ -74,7 +74,7 @@ Initial experiments showed that while both the wall clock time and maximum resid
 ![Relationship between runner size; and compile time and memory usage](/images/blog_running_away/fig_1_linearity.png)
 
 Therefore, a model with 10000 arrays will take over 4 minutes and around 8 gbyte of memory to compile — neither of which are really acceptable.
-To put this in perspective, if you split a model up into about 100 populations and connect most of the permutations together (this is an all-too-reasonable assumption in many areas of the mammalian brain), your could easily reach this many variables.
+To put this in perspective, if you split a model up into about 100 populations and connect most of the permutations together (this is an all-too-reasonable assumption in many areas of the mammalian brain), you could easily reach this many variables.
 
 So....what is NVCC doing with all this time and memory?
 ``runner.cc`` only contains host code (NVCC is just used to ensure the same compiler/options across execution units and to deal with setting up the CUDA linker/include paths) but, when you pass a 5 mbyte ``runner.cc`` file to NVCC, the file that is passed on to the host compiler (GCC) has grown to 15 mbyte!
