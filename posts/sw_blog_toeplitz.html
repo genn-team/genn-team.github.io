@@ -267,7 +267,7 @@ is then given by multiplying F from the left onto \(I_\text{col}\) as defined ab
 <p>Finally, \(R_{\text{col}}\) can be reinterpreted as the output matrix \(R\) by arranging its entries row-wise in a \(4\times 4\) matrix.</p>
 <p>There we have it - convolution (in the machine learning sense, i.e. corss-correlation) of a kernel \(K\) with a layer \(I\) expressed as the product of a doubly blocked Toeplitz matrix derived from \(K\) with the column vector of the row-wise unrolled entries from \(I\).</p>
 <p>The following python function is a simple implementation of this method</p>
-<pre class="code literal-block"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="code"><pre class="code literal-block"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">toeplitz</span>
 
 <span class="k">def</span> <span class="nf">convolution</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
@@ -321,69 +321,74 @@ is then given by multiplying F from the left onto \(I_\text{col}\) as defined ab
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> 
         <span class="nb">print</span><span class="p">(</span><span class="s1">'R as matrix= </span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">R</span>
-</pre>
+</pre></div>
+
 <p>To test, one can, for instance, use</p>
-<pre class="code literal-block"><span class="c1"># kernel</span>
+<div class="code"><pre class="code literal-block"><span class="c1"># kernel</span>
 <span class="n">K</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">],[</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">]])</span>
 <span class="c1"># layer</span>
 <span class="n">I</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span>
 <span class="n">R</span><span class="o">=</span> <span class="n">convolution</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
-</pre>
+</pre></div>
+
 <p>The output would then be</p>
-<pre class="code literal-block"><span class="err">padded kernel= </span>
-<span class="err"> [[40 30  0  0]</span>
-<span class="err"> [20 10  0  0]</span>
-<span class="err"> [ 0  0  0  0]]</span>
-<span class="err">Toeplitz list= </span>
-<span class="err"> [array([[40.,  0.,  0.],</span>
-<span class="err">       [30., 40.,  0.],</span>
-<span class="err">       [ 0., 30., 40.],</span>
-<span class="err">       [ 0.,  0., 30.]]), array([[20.,  0.,  0.],</span>
-<span class="err">       [10., 20.,  0.],</span>
-<span class="err">       [ 0., 10., 20.],</span>
-<span class="err">       [ 0.,  0., 10.]]), array([[0., 0., 0.],</span>
-<span class="err">       [0., 0., 0.],</span>
-<span class="err">       [0., 0., 0.],</span>
-<span class="err">       [0., 0., 0.]])]</span>
-<span class="err">doubly_indices= </span>
-<span class="err"> [[0 2]</span>
-<span class="err"> [1 0]</span>
-<span class="err"> [2 1]]</span>
-<span class="err">Toeplitz matrix= </span>
-<span class="err"> [[40.  0.  0.  0.  0.  0.]</span>
-<span class="err"> [30. 40.  0.  0.  0.  0.]</span>
-<span class="err"> [ 0. 30. 40.  0.  0.  0.]</span>
-<span class="err"> [ 0.  0. 30.  0.  0.  0.]</span>
-<span class="err"> [20.  0.  0. 40.  0.  0.]</span>
-<span class="err"> [10. 20.  0. 30. 40.  0.]</span>
-<span class="err"> [ 0. 10. 20.  0. 30. 40.]</span>
-<span class="err"> [ 0.  0. 10.  0.  0. 30.]</span>
-<span class="err"> [ 0.  0.  0. 20.  0.  0.]</span>
-<span class="err"> [ 0.  0.  0. 10. 20.  0.]</span>
-<span class="err"> [ 0.  0.  0.  0. 10. 20.]</span>
-<span class="err"> [ 0.  0.  0.  0.  0. 10.]]</span>
-<span class="err">I_col=  [1 2 3 4 5 6]</span>
-<span class="err">R as vector= </span>
-<span class="err"> [ 40. 110. 180.  90. 180. 370. 470. 210.  80. 140. 170.  60.]</span>
-<span class="err">R as matrix= </span>
-<span class="err"> [[ 40. 110. 180.  90.]</span>
-<span class="err"> [180. 370. 470. 210.]</span>
-<span class="err"> [ 80. 140. 170.  60.]]</span>
-</pre>
+<div class="code"><pre class="code literal-block">padded kernel= 
+ [[40 30  0  0]
+ [20 10  0  0]
+ [ 0  0  0  0]]
+Toeplitz list= 
+ [array([[40.,  0.,  0.],
+       [30., 40.,  0.],
+       [ 0., 30., 40.],
+       [ 0.,  0., 30.]]), array([[20.,  0.,  0.],
+       [10., 20.,  0.],
+       [ 0., 10., 20.],
+       [ 0.,  0., 10.]]), array([[0., 0., 0.],
+       [0., 0., 0.],
+       [0., 0., 0.],
+       [0., 0., 0.]])]
+doubly_indices= 
+ [[0 2]
+ [1 0]
+ [2 1]]
+Toeplitz matrix= 
+ [[40.  0.  0.  0.  0.  0.]
+ [30. 40.  0.  0.  0.  0.]
+ [ 0. 30. 40.  0.  0.  0.]
+ [ 0.  0. 30.  0.  0.  0.]
+ [20.  0.  0. 40.  0.  0.]
+ [10. 20.  0. 30. 40.  0.]
+ [ 0. 10. 20.  0. 30. 40.]
+ [ 0.  0. 10.  0.  0. 30.]
+ [ 0.  0.  0. 20.  0.  0.]
+ [ 0.  0.  0. 10. 20.  0.]
+ [ 0.  0.  0.  0. 10. 20.]
+ [ 0.  0.  0.  0.  0. 10.]]
+I_col=  [1 2 3 4 5 6]
+R as vector= 
+ [ 40. 110. 180.  90. 180. 370. 470. 210.  80. 140. 170.  60.]
+R as matrix= 
+ [[ 40. 110. 180.  90.]
+ [180. 370. 470. 210.]
+ [ 80. 140. 170.  60.]]
+</pre></div>
+
 <p>Note, that this example is inspired by <a href="https://raw.githubusercontent.com/alisaaalehi/convolution_as_multiplication/master/ConvAsMulExplained.pdf">Salehi's tutorial</a> but because we are calculating the machine learning covolution (cross-correlation) and Salehi the mathematical convolution as used in signal processing, the results are not the same. To generate identical results one can use the doubly flipped kernel,</p>
-<pre class="code literal-block"><span class="c1"># kernel</span>
+<div class="code"><pre class="code literal-block"><span class="c1"># kernel</span>
 <span class="n">K</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">40</span><span class="p">,</span><span class="mi">30</span><span class="p">],[</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">]])</span>
 <span class="c1"># layer</span>
 <span class="n">I</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span>
 <span class="n">R</span><span class="o">=</span> <span class="n">convolution</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"R= </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
-</pre>
+</pre></div>
+
 <p>and obtain</p>
-<pre class="code literal-block"> <span class="n">R</span><span class="o">=</span> 
+<div class="code"><pre class="code literal-block"> <span class="n">R</span><span class="o">=</span> 
  <span class="p">[[</span> <span class="mf">10.</span>  <span class="mf">40.</span>  <span class="mf">70.</span>  <span class="mf">60.</span><span class="p">]</span>
  <span class="p">[</span> <span class="mf">70.</span> <span class="mf">230.</span> <span class="mf">330.</span> <span class="mf">240.</span><span class="p">]</span>
  <span class="p">[</span><span class="mf">120.</span> <span class="mf">310.</span> <span class="mf">380.</span> <span class="mf">240.</span><span class="p">]]</span>
-</pre>
+</pre></div>
+
 <p>which exactly is Salehi's result.</p>
 <div class="footnote">
 <hr>
