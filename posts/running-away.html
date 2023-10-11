@@ -66,7 +66,7 @@ However, as users have started making bigger models and not always wanting to ge
 <h2>Jinjaly investigating</h2>
 <p>To investigate this in a slightly simpler way than just building larger and larger GeNN models until things break, I used <a href="https://jinja.palletsprojects.com">Jinja</a> to build a template that could generate fake <code>runner.cc</code> files containing varying number of arrays, representing the state variables in a real model. 
 The heart of this template looked something like this:</p>
-<div class="code"><pre class="code literal-block"><span class="c1">// Push and pull functions</span>
+<pre class="code literal-block"><span class="c1">// Push and pull functions</span>
 <span class="p">{</span><span class="o">%</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">array</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">arrays</span><span class="w"> </span><span class="o">%</span><span class="p">}</span><span class="w"></span>
 <span class="kt">void</span><span class="w"> </span><span class="n">push</span><span class="p">{{</span><span class="n">array</span><span class="p">.</span><span class="n">name</span><span class="p">}}</span><span class="n">ToDevice</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">CHECK_CUDA_ERRORS</span><span class="p">(</span><span class="n">cudaMemcpy</span><span class="p">(</span><span class="n">d_</span><span class="p">{{</span><span class="n">array</span><span class="p">.</span><span class="n">name</span><span class="p">}},</span><span class="w"> </span><span class="p">{{</span><span class="n">array</span><span class="p">.</span><span class="n">name</span><span class="p">}},</span><span class="w"> </span>
@@ -93,10 +93,9 @@ The heart of this template looked something like this:</p>
 <span class="w">                                 </span><span class="p">{{</span><span class="n">array</span><span class="p">.</span><span class="n">size</span><span class="p">}}</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">)));</span><span class="w"></span>
 <span class="w">    </span><span class="p">{</span><span class="o">%</span><span class="w"> </span><span class="n">endfor</span><span class="w"> </span><span class="o">%</span><span class="p">}</span><span class="w">    </span>
 <span class="p">}</span><span class="w"></span>
-</pre></div>
-
+</pre>
 <p>this template (saved in <code>runner.cc.template</code>) could then be used to generate C++ and print it to stdout like:</p>
-<div class="code"><pre class="code literal-block"><span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
+<pre class="code literal-block"><span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
 
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"runner.cc.template"</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
     <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
@@ -106,12 +105,10 @@ The heart of this template looked something like this:</p>
 
 
 <span class="nb">print</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">arrays</span><span class="o">=</span><span class="n">arrays</span><span class="p">))</span>
-</pre></div>
-
+</pre>
 <p>On Linux, the C++ could then be built using the same command line used by GeNN itself (some options omitted for brevity) and timed using the <code>/usr/bin/time</code> (I recently discovered that <code>command time</code> can be used as an alternative way of disambiguating this from the bash builtin <code>time</code>):</p>
-<div class="code"><pre class="code literal-block">/usr/bin/time -v nvcc -c -x cu -arch sm_86 -std<span class="o">=</span>c++11 test.cc
-</pre></div>
-
+<pre class="code literal-block">/usr/bin/time -v nvcc -c -x cu -arch sm_86 -std<span class="o">=</span>c++11 test.cc
+</pre>
 <p>Initial experiments showed that while both the wall clock time and maximum resident set size (roughly analagous to peak physical memory usage) grow approximately linearly (much to my relief after reading way too many <a href="https://randomascii.wordpress.com/category/quadratic/">horror stories</a> on Bruce Dawson's <a href="https://randomascii.wordpress.com">excellent blog</a>) with the number of arrays, it still grew extremely rapidly:</p>
 <p><img alt="Relationship between runner size; and compile time and memory usage" src="../images/blog_running_away/fig_1_linearity.png"></p>
 <p>Therefore, a model with 10000 arrays will take over 4 minutes and around 8 gbyte of memory to compile — neither of which are really acceptable.
@@ -122,24 +119,22 @@ However, this turned out to be simply because NVCC is in charge of running the p
 <h2>Profiling</h2>
 <p>Around this point, I remembered reading a blog post about <a href="https://aras-p.info/blog/2019/01/12/Investigating-compile-times-and-Clang-ftime-report/">profiling compiler times</a> on yet another <a href="https://aras-p.info/blog/">excellent blog</a> and turned on the <code>-ftime-report</code> GCC option.
 As the blog promised, this generates a gargantuan report which starts by splitting the compilation time of this 10000 array model into 'phases':</p>
-<div class="code"><pre class="code literal-block">phase setup             :  ...   0.00 ( 0%) wall    1384 kB ( 0%)
+<pre class="code literal-block">phase setup             :  ...   0.00 ( 0%) wall    1384 kB ( 0%)
 phase parsing           :  ...  20.81 ( 9%) wall 1794944 kB (25%)
 phase lang. deferred    :  ...   0.02 ( 0%) wall    2426 kB ( 0%)
 phase opt and generate  :  ... 214.14 (91%) wall 5412439 kB (75%)
 phase finalize          :  ...   0.54 ( 0%) wall       0 kB ( 0%)
-</pre></div>
-
+</pre>
 <p>Somewhat surprisingly (as, after all, we're throwing a massive source file at GCC), the vast majority of time is spent in "opt and generate" (code-generation and optimisation) rather than in parsing.
 Looking a little further down, where the report contains a seeminly unsorted list of processes within phases, the only other 'hot' line is:</p>
-<div class="code"><pre class="code literal-block">expand vars             :  ... 101.93 (43%) wall   50597 kB ( 1%)
-</pre></div>
-
+<pre class="code literal-block">expand vars             :  ... 101.93 (43%) wall   50597 kB ( 1%)
+</pre>
 <p>but, as a non-GCC developer, this doesn't help me a great deal....back to pursuing random hunches!</p>
 <h2>Smoking gun</h2>
 <p>As there's no virtual functions in this code, my C++ prejudices suggest that only exceptions could <em>possibly</em> be to blame and, as each of those <code>CHECK_CUDA_ERRORS</code> macros hides a <code>throw std::runtime_error</code>, maybe that's not unreasonable.
 Generating all that zero-cost abstraction must involve <em>expanding</em> a lot of <em>variables</em>....right!?
 How about if we replace our current implemementation of <code>CHECK_CUDA_ERRORS</code>:</p>
-<div class="code"><pre class="code literal-block"><span class="cp">#define CHECK_CUDA_ERRORS(call) {\</span>
+<pre class="code literal-block"><span class="cp">#define CHECK_CUDA_ERRORS(call) {\</span>
 <span class="cp">    cudaError_t error = call;\</span>
 <span class="cp">    if(error != cudaSuccess) {\</span>
 <span class="cp">        throw std::runtime_error(__FILE__": " \</span>
@@ -149,24 +144,21 @@ How about if we replace our current implemementation of <code>CHECK_CUDA_ERRORS<
 <span class="cp">                                 + ": " + cudaGetErrorString(error));\</span>
 <span class="cp">    }\</span>
 <span class="cp">}</span>
-</pre></div>
-
+</pre>
 <p>with:</p>
-<div class="code"><pre class="code literal-block"><span class="cp">#define CHECK_CUDA_ERRORS(call) {\</span>
+<pre class="code literal-block"><span class="cp">#define CHECK_CUDA_ERRORS(call) {\</span>
 <span class="cp">    cudaError_t error = call;\</span>
 <span class="cp">    assert(error == cudaSuccess); \</span>
 <span class="cp">}</span>
-</pre></div>
-
+</pre>
 <p>or even:</p>
-<div class="code"><pre class="code literal-block"><span class="cp">#define CHECK_CUDA_ERRORS(call) {\</span>
+<pre class="code literal-block"><span class="cp">#define CHECK_CUDA_ERRORS(call) {\</span>
 <span class="cp">    cudaError_t error = call;\</span>
 <span class="cp">    if(error != cudaSuccess) {\</span>
 <span class="cp">        std::abort();\</span>
 <span class="cp">    }\</span>
 <span class="cp">}</span>
-</pre></div>
-
+</pre>
 <p>Some template-meddling and sweeping later we can produce:</p>
 <p><img alt="Relationship between number of arrays and error handling approach; and compile time and memory usage" src="../images/blog_running_away/fig_2_alternate_error.png"></p>
 <p>Seems like this actually works! Our 10000 array model now only takes 30 seconds and less than 1 gbyte of memory to compile which is much more reasonable!</p>
@@ -175,16 +167,15 @@ Compile times seem much better when using the single-threaded CPU backend and th
 Admittedly, because there's no need to copy data when everthing's on the CPU, this backend generates empty 'push' and 'pull' functions so there's less code to compile overall but, if generating exception handling code was the problem, you would expect issues here too.
 Maybe expanding all that message-generating code is the real issue...
 How about we hack the following additional variants into the template:</p>
-<div class="code"><pre class="code literal-block"><span class="cp">#define CHECK_CUDA_ERRORS(call) {\</span>
+<pre class="code literal-block"><span class="cp">#define CHECK_CUDA_ERRORS(call) {\</span>
 <span class="cp">    cudaError_t error = call;\</span>
 <span class="cp">    if(error != cudaSuccess) {\</span>
 <span class="cp">        throw std::runtime_error();\</span>
 <span class="cp">    }\</span>
 <span class="cp">}</span>
-</pre></div>
-
+</pre>
 <p>and</p>
-<div class="code"><pre class="code literal-block"><span class="cp">#define CHECK_CUDA_ERRORS(call) {\</span>
+<pre class="code literal-block"><span class="cp">#define CHECK_CUDA_ERRORS(call) {\</span>
 <span class="cp">    cudaError_t error = call;\</span>
 <span class="cp">    if(error != cudaSuccess) {\</span>
 <span class="cp">        std::cerr &lt;&lt; __FILE__ &lt;&lt; ": " &lt;&lt; __LINE__;\</span>
@@ -193,8 +184,7 @@ How about we hack the following additional variants into the template:</p>
 <span class="cp">        std::abort();\</span>
 <span class="cp">    }\</span>
 <span class="cp">}</span>
-</pre></div>
-
+</pre>
 <p>and sweep:</p>
 <p><img alt="Relationship between number of arrays and error handling approach; and compile time and memory usage" src="../images/blog_running_away/fig_3_more_alternate_error.png"></p>
 <p><code>std::abort</code> is definitely easier on the compiler than throwing exceptions but, compiling the message generation code also seems to make a large difference.</p>
@@ -204,18 +194,16 @@ I can't quite face repeating this whole process again but, initial tests suggest
 Using the simplest <code>std::abort</code> raising <code>CHECK_CUDA_ERRORS</code> macro, the 10000 array model can be compiled in around 19 seconds whereas, using the original exception-throwing macro...I have given up waiting after around 1 hour!</p>
 <h2>Implementing a workaround</h2>
 <p>GeNN is approaching the end of the 4.X release cycle so, for now, I have added a simple but slightly hacky workaround for these issues by adding a <code>generateSimpleErrorHandling</code> flag to GeNN's CUDA backend to switch from generating code with the previous full-fat <code>CHECK_CUDA_ERRORS</code> macro to the simplest version which simply calls <code>std::abort</code> without generating a message. This can be turned on from C++ like:</p>
-<div class="code"><pre class="code literal-block"><span class="kt">void</span><span class="w"> </span><span class="nf">modelDefinition</span><span class="p">(</span><span class="n">NNmodel</span><span class="w"> </span><span class="o">&amp;</span><span class="n">model</span><span class="p">)</span><span class="w"></span>
+<pre class="code literal-block"><span class="kt">void</span><span class="w"> </span><span class="nf">modelDefinition</span><span class="p">(</span><span class="n">NNmodel</span><span class="w"> </span><span class="o">&amp;</span><span class="n">model</span><span class="p">)</span><span class="w"></span>
 <span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="p">...</span><span class="w"></span>
 <span class="w">    </span><span class="n">GENN_PREFERENCES</span><span class="p">.</span><span class="n">generateSimpleErrorHandling</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="p">...</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
-</pre></div>
-
+</pre>
 <p>or from Python like:</p>
-<div class="code"><pre class="code literal-block"><span class="n">model</span> <span class="o">=</span> <span class="n">GeNNModel</span><span class="p">(</span><span class="s2">"float"</span><span class="p">,</span> <span class="s2">"my_model"</span><span class="p">,</span> <span class="n">generateSimpleErrorHandling</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-
+<pre class="code literal-block"><span class="n">model</span> <span class="o">=</span> <span class="n">GeNNModel</span><span class="p">(</span><span class="s2">"float"</span><span class="p">,</span> <span class="s2">"my_model"</span><span class="p">,</span> <span class="n">generateSimpleErrorHandling</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre>
 <h2>Real models</h2>
 <p>The largest model we currently have to play with with is the <a href="https://github.com/neworderofjamie/multi-area-model/">multi-area cortical model</a>.
 Although it has 64516 synapse groups, due to its use of procedural connectivity (where all synaptic connectivity, weights and delays are generated on the fly), it doesn't actually have any per-synapse group variables with push and pull functions.
@@ -258,3 +246,4 @@ Next post
     </script>
 </body>
 </html>
+
