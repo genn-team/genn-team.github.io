@@ -140,7 +140,7 @@ TRANSLATIONS_PATTERN = '{path}.{lang}.{ext}'
 
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
-        ("https://genn-team.github.io/genn/documentation/4/html/index.html", "Documentation"),
+        ("https://genn-team.github.io/genn/documentation/5/index.html", "Documentation"),
         ("/tutorials.html", "Tutorials"),
         ("/blog/","Latest Blog"), 
         ("/archive.html", "Blog Archive"),
