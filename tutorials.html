@@ -30,7 +30,7 @@
                 <p class="lead">Welcome to GeNN</p>
 
             </div>
-                <nav id="menu" role="navigation" class="sidebar-nav"><a class="sidebar-nav-item" href="https://genn-team.github.io/genn/documentation/4/html/index.html">Documentation</a>
+                <nav id="menu" role="navigation" class="sidebar-nav"><a class="sidebar-nav-item" href="https://genn-team.github.io/genn/documentation/5/index.html">Documentation</a>
         <a class="sidebar-nav-item" href="#">Tutorials</a>
         <a class="sidebar-nav-item" href="blog/">Latest Blog</a>
         <a class="sidebar-nav-item" href="archive.html">Blog Archive</a>
@@ -39,7 +39,7 @@
     
     
     </nav><footer id="footer"><span class="copyright">
-              Contents © 2023         <a href="mailto:t.nowotny@sussex.ac.uk">GeNN Team</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+              Contents © 2024         <a href="mailto:t.nowotny@sussex.ac.uk">GeNN Team</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             </span>
             
             
@@ -52,47 +52,8 @@
 
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <h2>CompNeuro 101</h2>
-Building spiking neural network models in GeNN
-<h3>Neurons</h3>
-Create a model consisting of a population of Izhikevich neurons with heterogeneous parameters, driven by a stimulus current. Simulate and record state variables.
-<a href="https://colab.research.google.com/github/genn-team/tutorials/blob/master/comp_neuro_101/1_neurons.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg"></a>
-
-<h3>Synapses</h3>
-Create a simple balanced random network with two, sparsely connected populations of leaky integrate-and-fire neurons. Simulate and record spikes.
-<a href="https://colab.research.google.com/github/genn-team/tutorials/blob/master/comp_neuro_101/2_synapses.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg"></a>
-
-<br><br><h2>MNIST inference</h2>
-Perform MNIST inference by converting a pre-trained ANN to an SNN
-<h3>Presenting a single image</h3>
-Create a simple three layer network of integrate-and-fire neurons, densely connected with pre-trained weights. Present a single MNIST image and visualise spiking activity.
-<a href="https://colab.research.google.com/github/genn-team/tutorials/blob/master/mnist_inference/tutorial_1.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg"></a>
-
-<h3>Classifying entire test set</h3>
-Present entire MNIST test set to previous model and calculate accuracy.
-<a href="https://colab.research.google.com/github/genn-team/tutorials/blob/master/mnist_inference/tutorial_2.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg"></a>
-
-<h3>Improve classification performance</h3>
-Use parallel batching and custom updates to improve inference performance by over 30x compared to previous tutorial.
-<a href="https://colab.research.google.com/github/genn-team/tutorials/blob/master/mnist_inference/tutorial_3.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg"></a>
-
-<br><br><h2>Insect-inspired MNIST classification</h2>
-Train a model of the insect mushroom body using an STDP learning rule to classify MNIST.
-<h3>Projection Neurons</h3>
-Create the first layer of <i>Projection Neurons</i> which convert input images into a sparse temporal code.
-<a href="https://colab.research.google.com/github/genn-team/tutorials/blob/master/mushroom_body/1_first_layer.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg"></a>
-<h3>Kenyon Cells</h3>
-Add a second, randomly-connected layer of <i>Kenyon Cells</i> to the model.
-<a href="https://colab.research.google.com/github/genn-team/tutorials/blob/master/mushroom_body/2_second_layer.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg"></a>
-<h3>Kenyon Cell gain control</h3>
-Add recurrent inhibition circuit, inspired by <i>Giant GABAergic Neuron</i> in locusts, to improve sparse coding of the Kenyon Cells.
-<a href="https://colab.research.google.com/github/genn-team/tutorials/blob/master/mushroom_body/3_second_layer_gain_control.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg"></a>
-<h3>Mushroom Body Output Neurons</h3>
-Add <i>Mushroom Body Output Neurons</i> with STDP learning and train model on MNIST training set.
-<a href="https://colab.research.google.com/github/genn-team/tutorials/blob/master/mushroom_body/4_third_layer.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg"></a>
-<h3>Testing</h3>
-Create a simplified copy of the model without learning, load in the trained weights and calculate inference accuracy on MNIST test set.
-<a href="https://colab.research.google.com/github/genn-team/tutorials/blob/master/mushroom_body/5_testing.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg"></a>
+    <h2>GeNN</h2>
+All GeNN tutorials have now been migrated to <a href="https://genn-team.github.io/genn/documentation/5/tutorials/index.html">the documentation</a>
 
 <br><br><h2>mlGeNN</h2>
 Learn how to use mlGeNN - our new high-level API for spike-based machine learning - for various ML workflows.
@@ -124,4 +85,3 @@ Create and train a simple convolutional neural network in Keras, convert to SNN 
     </script>
 </body>
 </html>
-
