@@ -6,27 +6,43 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
+  <loc>http://genn-team.github.io/authors/genn-team.xml</loc>
+  <lastmod>2025-09-17T16:00:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://genn-team.github.io/authors/jash-vora.xml</loc>
+  <lastmod>2025-09-17T16:07:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://genn-team.github.io/authors/thomas-nowotny.xml</loc>
+  <lastmod>2025-09-17T16:00:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>http://genn-team.github.io/categories/cat_software-blog.xml</loc>
-  <lastmod>2025-04-26T13:53:00Z</lastmod>
+  <lastmod>2025-09-17T16:00:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://genn-team.github.io/categories/convolution.xml</loc>
-  <lastmod>2025-04-26T13:53:00Z</lastmod>
+  <lastmod>2025-09-17T16:00:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://genn-team.github.io/categories/gsoc.xml</loc>
+  <lastmod>2025-09-17T16:05:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://genn-team.github.io/categories/math.xml</loc>
-  <lastmod>2025-04-26T13:53:00Z</lastmod>
+  <lastmod>2025-09-17T16:00:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://genn-team.github.io/categories/toeplitz.xml</loc>
-  <lastmod>2025-04-26T13:53:00Z</lastmod>
+  <lastmod>2025-09-17T16:00:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://genn-team.github.io/rss.xml</loc>
-  <lastmod>2025-04-26T13:53:00Z</lastmod>
+  <lastmod>2025-09-17T16:07:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://genn-team.github.io/sitemap.xml</loc>
-  <lastmod>2025-04-26T13:53:00Z</lastmod>
+  <lastmod>2025-09-17T16:07:00Z</lastmod>
  </sitemap>
 </sitemapindex>
