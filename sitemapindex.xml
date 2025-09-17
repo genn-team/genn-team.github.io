@@ -10,6 +10,10 @@
   <lastmod>2025-09-17T16:00:00Z</lastmod>
  </sitemap>
  <sitemap>
+  <loc>http://genn-team.github.io/authors/jamie.xml</loc>
+  <lastmod>2025-09-17T16:30:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>http://genn-team.github.io/authors/jash-vora.xml</loc>
   <lastmod>2025-09-17T16:07:00Z</lastmod>
  </sitemap>
@@ -39,10 +43,10 @@
  </sitemap>
  <sitemap>
   <loc>http://genn-team.github.io/rss.xml</loc>
-  <lastmod>2025-09-17T16:07:00Z</lastmod>
+  <lastmod>2025-09-17T16:30:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://genn-team.github.io/sitemap.xml</loc>
-  <lastmod>2025-09-17T16:07:00Z</lastmod>
+  <lastmod>2025-09-17T16:30:00Z</lastmod>
  </sitemap>
 </sitemapindex>

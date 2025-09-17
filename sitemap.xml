@@ -27,11 +27,15 @@
  </url>
  <url>
   <loc>http://genn-team.github.io/authors/</loc>
-  <lastmod>2025-09-17T16:00:00Z</lastmod>
+  <lastmod>2025-09-17T16:30:00Z</lastmod>
  </url>
  <url>
   <loc>http://genn-team.github.io/authors/genn-team.html</loc>
   <lastmod>2025-09-17T16:00:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://genn-team.github.io/authors/jamie.html</loc>
+  <lastmod>2025-09-17T16:30:00Z</lastmod>
  </url>
  <url>
   <loc>http://genn-team.github.io/authors/jash-vora.html</loc>
@@ -71,22 +75,18 @@
  </url>
  <url>
   <loc>http://genn-team.github.io/posts/developing-an-ispc-backend-for-genn-bridging-gpu-and-cpu-performance-for-neural-network-simulations.html</loc>
-  <lastmod>2025-09-17T16:07:00Z</lastmod>
- </url>
- <url>
-  <loc>http://genn-team.github.io/posts/jash.html</loc>
-  <lastmod>2025-09-17T12:49:00Z</lastmod>
+  <lastmod>2025-09-17T16:29:00Z</lastmod>
  </url>
  <url>
   <loc>http://genn-team.github.io/posts/running-away.html</loc>
-  <lastmod>2025-09-17T16:07:00Z</lastmod>
+  <lastmod>2025-09-17T16:30:00Z</lastmod>
  </url>
  <url>
   <loc>http://genn-team.github.io/posts/sw_blog_toeplitz.html</loc>
-  <lastmod>2025-09-17T16:00:00Z</lastmod>
+  <lastmod>2025-09-17T16:29:00Z</lastmod>
  </url>
  <url>
   <loc>http://genn-team.github.io/tutorials.html</loc>
-  <lastmod>2025-09-17T12:49:00Z</lastmod>
+  <lastmod>2025-09-17T16:29:00Z</lastmod>
  </url>
 </urlset>

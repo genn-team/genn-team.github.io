@@ -7,6 +7,7 @@
 .. link: 
 .. description: 
 .. type: text
+.. author: Jamie
 -->
 
 After spending a long time updating GeNN's code generator to generate more efficient CUDA kernels which have the side benefit of compiling much more quickly, there remained something of a dirty secret.
