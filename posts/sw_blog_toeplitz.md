@@ -8,6 +8,7 @@
 .. description: 
 .. type: text
 .. has_math: yes
+.. author: Thomas Nowotny
 -->
 
 How to do convolutions with doubly blocked Toeplitz matrices
