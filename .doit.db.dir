@@ -132,7 +132,7 @@
 'scale_images:output/images/convolution1.svg', (143872, 224)
 'create_bundles:output/assets/js/all.js', (144384, 265)
 'scale_images:output/images/blog_12.png', (144896, 217)
-'render_pages:output/index.html', (401920, 7020)
+'render_pages:output/index.html', (401920, 7019)
 'scale_images:output/images/thomasnowotny.jpg', (149504, 228)
 'copy_assets:output/assets/css/theme.css', (239104, 947)
 'scale_images:output/images/header-bg.jpg', (150528, 219)
