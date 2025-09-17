@@ -31,6 +31,11 @@
     {{ html_title() }}
     <span class="post-date">
       <time class="published dt-published" datetime="{{ post.formatted_date('webiso') }}" itemprop="datePublished" title="{{ post.formatted_date(date_format)|e }}">{{ post.formatted_date(date_format)|e }}</time>
+      {% if post.author() %}
+        
+      {{ post.author()|e}}
+        
+      {% endif %}
     </span>
     {% if post.meta('link') %}
             <p class="linkline"><a href="{{ post.meta('link') }}">{{ messages("Original site") }}</a></p>
@@ -38,7 +43,7 @@
     {% if post.description() %}
         <meta name="description" itemprop="description" content="{{ post.description()|e }}">
     {% endif %}
-
+    
     {{ html_translations(post) }}
     </header>
 {% endmacro %}
