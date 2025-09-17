@@ -12,6 +12,7 @@
         <li>
           <a href="{{ post.permalink() }}" class="listtitle">{{ post.title()|e }}</a> -
           <time class="listdate" datetime="{{ post.formatted_date('webiso') }}" title="{{ post.formatted_date(date_format)|e }}">{{ post.formatted_date(date_format)|e }}</time>
+          {% if post.author() %}{{ post.author()|e}}{% endif %}
         </li>
     {% endfor %}
     </ul>

@@ -23,7 +23,10 @@
     <header>
         <h1 class="post-title p-name"><a href="{{ post.permalink() }}" class="u-url">{{ post.title()|e }}</a></h1>
         <div class="metadata">
-            <span class="post-date dateline"><time class="published dt-published" datetime="{{ post.formatted_date('webiso') }}" title="{{ post.formatted_date(date_format)|e }}">{{ post.formatted_date(date_format)|e }}</time></span>
+            <span class="post-date dateline">
+                <time class="published dt-published" datetime="{{ post.formatted_date('webiso') }}" title="{{ post.formatted_date(date_format)|e }}">{{ post.formatted_date(date_format)|e }}</time>
+                {% if post.author() %}{{ post.author()|e}}{% endif %}
+            </span>
         </div>
     </header>
     {% if index_teasers %}
