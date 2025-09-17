@@ -23,11 +23,15 @@
  </url>
  <url>
   <loc>http://genn-team.github.io/archive.html</loc>
-  <lastmod>2025-09-17T16:07:00Z</lastmod>
+  <lastmod>2025-09-17T16:55:00Z</lastmod>
  </url>
  <url>
   <loc>http://genn-team.github.io/authors/</loc>
-  <lastmod>2025-09-17T16:30:00Z</lastmod>
+  <lastmod>2025-09-17T16:55:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://genn-team.github.io/authors/agrim-patil.html</loc>
+  <lastmod>2025-09-17T16:55:00Z</lastmod>
  </url>
  <url>
   <loc>http://genn-team.github.io/authors/jamie.html</loc>
@@ -59,7 +63,7 @@
  </url>
  <url>
   <loc>http://genn-team.github.io/categories/gsoc.html</loc>
-  <lastmod>2025-09-17T16:49:00Z</lastmod>
+  <lastmod>2025-09-17T16:55:00Z</lastmod>
  </url>
  <url>
   <loc>http://genn-team.github.io/categories/math.html</loc>
@@ -70,8 +74,12 @@
   <lastmod>2025-09-17T16:49:00Z</lastmod>
  </url>
  <url>
+  <loc>http://genn-team.github.io/posts/conda-packaging-for-genn.html</loc>
+  <lastmod>2025-09-17T16:55:00Z</lastmod>
+ </url>
+ <url>
   <loc>http://genn-team.github.io/posts/developing-an-ispc-backend-for-genn-bridging-gpu-and-cpu-performance-for-neural-network-simulations.html</loc>
-  <lastmod>2025-09-17T16:29:00Z</lastmod>
+  <lastmod>2025-09-17T16:55:00Z</lastmod>
  </url>
  <url>
   <loc>http://genn-team.github.io/posts/running-away.html</loc>

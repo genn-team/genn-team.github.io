@@ -6,6 +6,10 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
+  <loc>http://genn-team.github.io/authors/agrim-patil.xml</loc>
+  <lastmod>2025-09-17T16:55:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>http://genn-team.github.io/authors/jamie.xml</loc>
   <lastmod>2025-09-17T16:30:00Z</lastmod>
  </sitemap>
@@ -27,7 +31,7 @@
  </sitemap>
  <sitemap>
   <loc>http://genn-team.github.io/categories/gsoc.xml</loc>
-  <lastmod>2025-09-17T16:05:00Z</lastmod>
+  <lastmod>2025-09-17T16:55:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://genn-team.github.io/categories/math.xml</loc>
@@ -39,10 +43,10 @@
  </sitemap>
  <sitemap>
   <loc>http://genn-team.github.io/rss.xml</loc>
-  <lastmod>2025-09-17T16:30:00Z</lastmod>
+  <lastmod>2025-09-17T16:55:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://genn-team.github.io/sitemap.xml</loc>
-  <lastmod>2025-09-17T16:49:00Z</lastmod>
+  <lastmod>2025-09-17T16:55:00Z</lastmod>
  </sitemap>
 </sitemapindex>

@@ -51,7 +51,325 @@
     <div class="content container" id="content">
     
 <div class="post">
-    <article class="post h-entry post-text"><header><h1 class="post-title p-name"><a href="../posts/developing-an-ispc-backend-for-genn-bridging-gpu-and-cpu-performance-for-neural-network-simulations.html" class="u-url">Developing an ISPC Backend for GeNN: Bridging GPU and CPU Performance for Neural Network Simulations</a></h1>
+    <article class="post h-entry post-text"><header><h1 class="post-title p-name"><a href="../posts/conda-packaging-for-genn.html" class="u-url">Conda packaging for GeNN</a></h1>
+        <div class="metadata">
+            <span class="post-date dateline">
+                <time class="published dt-published" datetime="2025-09-17T17:54:15+01:00" title="2025-09-17 17:54">2025-09-17 17:54</time>
+Agrim Patil            </span>
+        </div>
+    </header><div class="e-content entry-content">
+    <hr>
+<h3>📂 Project Repository</h3>
+<p>🔗 <a href="https://github.com/Agrim-P777/Conda-package-GeNN">Conda-package-GeNN</a><br>
+This repository contains <em>all the code, packaging recipes, and documentation</em> developed during my Google Summer of Code project.</p>
+<hr>
+<h2>📑 Table of Contents</h2>
+<ul>
+<li>🌍 <a href="../posts/conda-packaging-for-genn.html#-google-summer-of-code-gsoc">Google Summer of Code (GSoC)</a>
+</li>
+<li>🧠 <a href="../posts/conda-packaging-for-genn.html#-about-incf">About INCF</a>
+</li>
+<li>⚡ <a href="../posts/conda-packaging-for-genn.html#-about-genn">About GeNN</a>
+</li>
+<li>❓ <a href="../posts/conda-packaging-for-genn.html#-problem-statement">Problem Statement</a>
+</li>
+<li>📦 <a href="../posts/conda-packaging-for-genn.html#-deliverables">Deliverables</a>
+</li>
+<li>🎮 <a href="../posts/conda-packaging-for-genn.html#-rise-of-cuda-in-neural-simulations">Rise of CUDA in Neural Simulations</a>
+</li>
+<li>📦 <a href="../posts/conda-packaging-for-genn.html#-why-conda-and-not-pypi">Why Conda (and not PyPI)</a>
+</li>
+<li>🏗️ <a href="../posts/conda-packaging-for-genn.html#%EF%B8%8F-package-architecture">Package Architecture</a>
+</li>
+<li>⚔️ <a href="../posts/conda-packaging-for-genn.html#%EF%B8%8F-challenges-faced-and-solutions">Challenges Faced and Solutions</a>
+</li>
+<li>🌀 <a href="../posts/conda-packaging-for-genn.html#-challenge-1-transition-from-cuda-12x-to-cuda-12x">Challenge 1: Transition from CUDA &lt;12.x to CUDA ≥12.x</a>
+</li>
+<li>⚔️ <a href="../posts/conda-packaging-for-genn.html#%EF%B8%8F-challenge-2-setting-cuda_path-after-installation">Challenge 2: Setting CUDA_PATH After Installation</a>
+</li>
+<li>⚔️ <a href="../posts/conda-packaging-for-genn.html#%EF%B8%8F-challenge-3-moving-windows-build-to-nmake--msbuild">Challenge 3: Moving Windows Build to NMake + MSBuild</a>
+</li>
+<li>⚔️ <a href="../posts/conda-packaging-for-genn.html#%EF%B8%8F-challenge-4-fixing-macos-dylib-handling-in-pygenn-cpu">Challenge 4: Fixing macOS .dylib Handling in pygenn-cpu</a>
+</li>
+<li>📦 <a href="../posts/conda-packaging-for-genn.html#-conda-forge-packages">Conda-Forge Packages</a>
+</li>
+<li>🌟 <a href="../posts/conda-packaging-for-genn.html#-impact-of-the-package">Impact of the Package</a>
+</li>
+</ul>
+<h3>🌍 Google Summer of Code (GSoC)</h3>
+<p><a href="https://summerofcode.withgoogle.com/">Google Summer of Code (GSoC)</a> is an annual global program focused on bringing new contributors into open source software development.<br>
+Contributors work with open source organizations under the guidance of mentors to learn, code, and make impactful contributions during the summer.</p>
+<h4>📊 GSoC 2025 Highlights</h4>
+<ul>
+<li>
+<strong>15,240 applicants</strong> from <strong>130 countries</strong> submitted <strong>23,559 proposals</strong>  </li>
+<li>
+<strong>185 mentoring organizations</strong> selected <strong>1,272 contributors</strong> from <strong>68 countries</strong>  </li>
+<li>
+<strong>66.3% of contributors</strong> had <em>no prior open source experience</em>, showing GSoC’s accessibility  </li>
+<li>A <strong>three-week Community Bonding period</strong> helps contributors and mentors plan and get oriented before coding  </li>
+</ul>
+<p>🔗 <a href="https://opensource.googleblog.com/2025/05/gsoc-2025-we-have-our-contributors.html">Read more on the official announcement</a></p>
+<h3>🧠 About INCF</h3>
+<p><a href="https://www.incf.org/"><img alt="INCF" src="https://gist.github.com/user-attachments/assets/3cce81f1-081a-4d65-a0c0-42321f10325a"></a><br>
+The <a href="https://www.incf.org/">International Neuroinformatics Coordinating Facility (INCF)</a> is an open and FAIR (Findable, Accessible, Interoperable, and Reusable) neuroscience standards organization.<br>
+Launched in 2005 through a proposal from the OECD Global Science Forum, INCF’s mission is to make neuroscience data and knowledge <strong>globally shareable and reusable</strong>.</p>
+<h4>🌐 Impact on Society</h4>
+<p>By developing community-driven standards and tools for data sharing, analysis, modeling, and simulation, INCF:
+- Promotes <strong>collaboration</strong> across international neuroscience communities<br>
+- Enables <strong>reproducible and scalable research</strong><br>
+- Accelerates <strong>discoveries in brain science</strong><br>
+- Supports better understanding of brain function in both <strong>health and disease</strong>  </p>
+<p>Through these efforts, INCF helps build a more open scientific ecosystem, ultimately contributing to advances in healthcare, mental health, and neurological research worldwide.</p>
+<h3>⚡ About GeNN</h3>
+<p><a href="https://genn-team.github.io/"><img alt="GeNN" src="https://gist.github.com/user-attachments/assets/16386ccf-35dd-4ae5-93fa-fd662fdce122"></a><br>
+The <a href="https://genn-team.github.io/">GPU-enhanced Neuronal Networks (GeNN)</a> project is a code generation framework designed to accelerate the simulation of spiking neural networks (SNNs) using GPUs.  </p>
+<h4>🔬 Role in Neuroscience</h4>
+<p>GeNN plays a crucial role in computational neuroscience by:
+- Enabling <strong>fast and efficient simulation</strong> of large-scale spiking neural networks<br>
+- Allowing researchers to <strong>prototype and test brain-inspired models</strong> at unprecedented scales<br>
+- Supporting <strong>reproducibility and standardization</strong> in neural simulations<br>
+- Bridging the gap between <strong>biological realism and computational efficiency</strong>  </p>
+<p>Through its GPU acceleration, GeNN empowers neuroscientists to explore complex models of brain function that would otherwise be computationally prohibitive.</p>
+<h3>❓ Problem Statement</h3>
+<p><a href="https://genn-team.github.io/">GeNN</a> is a <strong>C++ library</strong> that generates code for efficiently simulating <strong>Spiking Neural Networks (SNNs)</strong> using GPUs.<br>
+To compile the generated code, GeNN requires a <strong>C++ compiler</strong> and development versions of backend dependencies such as <strong>CUDA</strong>.  </p>
+<p>Currently, this means GeNN must be <strong>installed from source</strong>, which can be a barrier for many potential users:
+- Researchers may not have the right compiler or CUDA version installed
+- Installation errors can take hours to resolve
+- New users may be discouraged before even running their first simulation</p>
+<h4>🎯 Project Goal</h4>
+<p>For this project, I aimed to develop a <strong>Conda (Forge) package</strong> for GeNN which:
+- Handles the installation of all required dependencies (C++, CUDA, libraries)
+- Provides pre-built binaries for Linux, Windows, and macOS
+- Makes installation as simple as:</p>
+<p>```bash
+  conda install -c conda-forge pygenn-cpu   # CPU-only
+  conda install -c conda-forge pygenn-cuda  # CUDA-enabled</p>
+<h4>📦 Deliverables</h4>
+<ul>
+<li>✅ Conda-Forge recipes for both <strong>CPU</strong> and <strong>CUDA</strong> variants of GeNN</li>
+<li>✅ User documentation and installation instructions</li>
+</ul>
+<h3>🎮 Rise of CUDA in Neural Simulations</h3>
+<p><a href="https://developer.nvidia.com/cuda-toolkit"><img alt="NVIDIA" src="https://gist.github.com/user-attachments/assets/c8d2b869-7d5b-47a1-91f3-4acb862e5e2b"></a>  </p>
+<p>The introduction of <strong>CUDA (Compute Unified Device Architecture)</strong> by NVIDIA revolutionized the way scientists and engineers simulate neural networks.  </p>
+<h4>🚀 Why CUDA Matters</h4>
+<ul>
+<li>Provides <strong>massive parallelism</strong> by leveraging thousands of GPU cores  </li>
+<li>Accelerates <strong>matrix operations</strong> and <strong>synaptic updates</strong> critical for spiking neural networks  </li>
+<li>Reduces simulation times from <strong>hours or days to minutes or seconds</strong>  </li>
+<li>Allows scaling to <strong>millions of neurons and synapses</strong> in realistic brain models  </li>
+</ul>
+<h4>🧩 Impact on Neuroscience</h4>
+<p>By harnessing CUDA, researchers can:
+- Explore <strong>biologically detailed models</strong> of neural circuits<br>
+- Run <strong>real-time simulations</strong> for robotics and brain-inspired AI<br>
+- Investigate complex dynamics of the brain that were previously infeasible due to computational limits  </p>
+<p>In short, CUDA has been a <strong>key enabler</strong> in advancing computational neuroscience and the adoption of frameworks like <strong>GeNN</strong>.</p>
+<h3>📦 Why Conda (and not PyPI)</h3>
+<p>We chose <strong>Conda</strong> because our package is not just Python — it also includes a <strong>C++ backend and CUDA code</strong>.  </p>
+<ul>
+<li>Conda can package <strong>non-Python dependencies</strong> (C++, CUDA, compilers, system libraries), while PyPI is limited to Python-only distributions.  </li>
+<li>With Conda we can <strong>pin CUDA versions and compilers</strong>, ensuring compatibility across Linux, Windows, and macOS.  </li>
+<li>This makes Conda the better choice for distributing GPU-accelerated scientific software like <strong>GeNN</strong>, where reproducibility and native dependencies are critical.  </li>
+</ul>
+<h3>🏗️ Package Architecture</h3>
+<p><a href="https://conda-forge.org/"><img alt="Conda-Forge" src="https://gist.github.com/user-attachments/assets/31591c25-0ccd-4147-ad2e-ed39d6964785"></a>  </p>
+<p>We designed the package to provide <strong>two build variants</strong> of GeNN:</p>
+<ol>
+<li>
+<strong>CPU-only</strong>  </li>
+<li>Lightweight build that works without CUDA  </li>
+<li>
+<p>Useful for users who want to experiment with spiking neural networks on any system  </p>
+</li>
+<li>
+<p><strong>CUDA-enabled</strong>  </p>
+</li>
+<li>Full GPU acceleration using modular CUDA packages  </li>
+<li>Ideal for large-scale neuroscience simulations  </li>
+</ol>
+<h4>📂 Structure</h4>
+<ul>
+<li>Separate Conda recipes: <code>pygenn-cpu</code> and <code>pygenn-cuda</code>  </li>
+<li>Each recipe pins Python, NumPy ABI, and (for CUDA builds) modular CUDA components like <code>cuda-nvcc</code>, <code>cuda-cudart</code>, and <code>cuda-libraries</code>  </li>
+<li>Shared test suite ensures both variants behave consistently  </li>
+</ul>
+<p>This dual-architecture approach makes GeNN more <strong>accessible and reproducible</strong>, whether on laptops or GPU clusters.  </p>
+<p>🔗 <a href="https://github.com/Agrim-P777/Conda-package-GeNN/wiki/05.-GeNN-%E2%80%90-Conda-Package-Structure:-CPU%E2%80%90Only-and-CUDA%E2%80%90Enabled">Read more on the detailed package structure</a></p>
+<h3>⚔️ Challenges Faced and Solutions</h3>
+<h4>🌀 Challenge 1: Transition from CUDA &lt;12.x to CUDA ≥12.x</h4>
+<p>Initially, our package was built for <strong>CUDA 11.7</strong>, which used a <strong>monolithic toolkit package</strong>.</p>
+<p>👉 <a href="https://github.com/Agrim-P777/Conda-package-GeNN/blob/main/pygenn-linux-cuda11.7/meta.yaml">Example: CUDA 11.7 recipe</a></p>
+<p>However, starting with <strong>CUDA 12.x</strong>, Conda-Forge adopted a <strong>modular CUDA packaging</strong> system:</p>
+<ul>
+<li>Instead of a single <code>cudatoolkit</code> package</li>
+<li>CUDA is split into components like <code>cuda-nvcc</code>, <code>cuda-cudart</code>, <code>cuda-libraries</code>, <code>cuda-libraries-dev</code>, etc.</li>
+</ul>
+<p>🔗 <a href="https://github.com/Agrim-P777/Conda-package-GeNN/wiki/06.-Understanding-CUDA-Packaging-in-Conda%E2%80%90Forge:-Pre%E2%80%9012-vs-Post%E2%80%9012-Versions">Detailed explanation: Pre-12 vs Post-12 CUDA packaging</a></p>
+<h4>✅ Our Solution</h4>
+<ul>
+<li>Migrated the recipe to <strong>modular CUDA dependencies</strong> in <code>meta.yaml</code>
+</li>
+<li>
+<p>Explicitly pinned the CUDA version with:</p>
+<p><code>yaml
+- cuda-version =={{ cuda_version }}
+- cuda-nvcc {{ cuda_nvcc }}
+- cuda-cudart {{ cuda_cudart }}
+- cuda-libraries {{ cuda_libraries }}
+- cuda-libraries-dev {{ cuda_libraries_dev }}</code></p>
+</li>
+<li>
+<p>Ensured compatibility across <strong>Linux, Windows, and macOS</strong> by adjusting the build matrix and using Conda’s modular CUDA toolchain.</p>
+</li>
+</ul>
+<p>This transition was essential to keep the package <strong>future-proof and aligned</strong> with Conda-Forge’s evolving CUDA ecosystem.</p>
+<h4>⚔️ Challenge 2: Setting <code>CUDA_PATH</code> After Installation</h4>
+<p>During testing, we discovered that after installing the CUDA-enabled package,</p>
+<p>the <strong><code>CUDA_PATH</code> environment variable</strong> was <strong>not automatically set</strong> in the Conda environment.</p>
+<ul>
+<li>This caused issues on both <strong>Linux</strong> and <strong>Windows</strong>, where users needed <code>CUDA_PATH</code> for compiling and running GeNN models.</li>
+<li>Without it, the CUDA backend could not be located properly by the build system.</li>
+</ul>
+<p>🔗 <a href="https://github.com/Agrim-P777/Conda-package-GeNN/wiki/08.-Including-a-post%E2%80%90link.sh-script-in-the-Conda-Package">Reference: post-link script design</a></p>
+<h4>✅ Our Solution</h4>
+<ul>
+<li>Added <strong><code>post-link.sh</code></strong> (Linux/macOS) and <strong><code>post-link.bat</code></strong> (Windows) scripts to the recipe.</li>
+<li>These scripts:<ul>
+<li>Notify users that they must export or set <code>CUDA_PATH</code> in their shell session</li>
+<li>Provide clear guidance on how to configure it (<code>export CUDA_PATH=$CONDA_PREFIX</code> on Linux/macOS, <code>set CUDA_PATH=%CONDA_PREFIX%\\Library</code> on Windows)</li>
+</ul>
+</li>
+</ul>
+<p><strong>Example <code>post-link.sh</code> Script</strong></p>
+<div class="code"><pre class="code literal-block"><span class="ch">#!/bin/bash</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">""</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"============================================"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"PyGeNN CUDA backend installed successfully!"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">""</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"To enable CUDA support, set the environment variable:"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"    export CUDA_PATH=</span><span class="nv">$CONDA_PREFIX</span><span class="s2">"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">""</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Alternatively, if you have a system-wide CUDA installation:"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"    export CUDA_PATH=/usr/local/cuda-12.x"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">""</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"PyGeNN will automatically use CUDA_PATH if set; otherwise, you may"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"need to manually configure it for certain use cases."</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"============================================"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">""</span>
+</pre></div>
+
+<p>This ensures users are explicitly informed about the required step, making the installation process <strong>clearer and less error-prone</strong>.</p>
+<h4>⚔️ Challenge 3: Moving Windows Build to NMake + MSBuild</h4>
+<p>Originally, the Windows build system relied only on <strong>MSBuild</strong>, which was insufficient to support conda pacakge's 
+GeNN’s requirement for <strong>runtime code compilation</strong> of models.  </p>
+<h4>✅ Our Solution</h4>
+<ul>
+<li>Migrated the Windows backend to a hybrid <strong>NMake + MSBuild</strong> system.  </li>
+<li>Benefits of this change:</li>
+<li>Enabled <strong>runtime compilation</strong> of CUDA kernels on Windows  </li>
+<li>Added <strong>robust CUDA path management</strong>, ensuring builds work with Conda’s modular CUDA layout  </li>
+<li>Standardized the use of <strong><code>CUDA_LIBRARY_PATH</code></strong> across Windows environments for consistency  </li>
+</ul>
+<p>This migration improved reliability and made the Windows build <strong>much closer to Linux in flexibility</strong>,<br>
+while also aligning with Conda’s CUDA packaging best practices.  </p>
+<p>🔗 <a href="https://github.com/genn-team/genn/pull/705">My Pull Request #705 – robust CUDA lib path resolution for Conda &amp; system installs</a></p>
+<h4>⚔️ Challenge 4: Fixing macOS <code>.dylib</code> Handling in <code>pygenn-cpu</code>
+</h4>
+<p>When building the <strong>CPU-only PyGeNN package</strong> on macOS, we encountered an issue where<br>
+the required <strong>dynamic libraries (<code>.dylib</code>)</strong> were <strong>not being copied correctly</strong> into the installed package directory.<br>
+This caused runtime errors where Python could not locate GeNN’s backend libraries.</p>
+<h4>✅ Our Solution (My PR 🔧)</h4>
+<p>I submitted <a href="https://github.com/genn-team/genn/pull/707">PR #707</a> to fix the <strong>macOS library handling</strong> in <code>setup.py</code>.<br>
+Key technical improvements included:</p>
+<ul>
+<li>
+<strong>Dynamic Library Discovery</strong>  </li>
+<li>Updated <code>setup.py</code> to explicitly find GeNN’s <code>.dylib</code> artifacts generated during the build process.  </li>
+<li>
+<p>Ensured both the <strong>core <code>libgenn_dynamic.dylib</code></strong> and the <strong>CPU backend libraries</strong> were properly detected.  </p>
+</li>
+<li>
+<p><strong>Correct Copy into <code>site-packages</code></strong>  </p>
+</li>
+<li>Added logic to copy these <code>.dylib</code> files into the final <code>pygenn</code> installation directory under <code>site-packages</code>.  </li>
+<li>
+<p>This guarantees the Python extension modules can locate their linked dynamic libraries at runtime.  </p>
+</li>
+<li>
+<p><strong>macOS Loader Path Fixes</strong>  </p>
+</li>
+<li>Adjusted the <code>install_name</code> handling so that macOS’s runtime linker resolves the <code>.dylib</code> files correctly.  </li>
+<li>Prevented the “image not found” errors that occurred when relocating the package to a Conda environment.  </li>
+</ul>
+<h4>🔬 Impact</h4>
+<ul>
+<li>Resolved <strong>import-time failures</strong> on macOS for the <code>pygenn-cpu</code> package.  </li>
+<li>Improved <strong>cross-platform parity</strong>, since Linux <code>.so</code> handling was already stable.  </li>
+<li>Made the CPU-only build truly <strong>portable</strong> across Conda environments on macOS.  </li>
+</ul>
+<p>🔗 <a href="https://github.com/genn-team/genn/pull/707">My Pull Request #707 – macOS <code>.dylib</code> fix in setup.py</a></p>
+<h3>📦 Conda-Forge Packages</h3>
+<p>After resolving build system and packaging challenges, we contributed to the <strong>official Conda-Forge recipes</strong> for PyGeNN.</p>
+<h4>🚀 Published Packages</h4>
+<ul>
+<li>
+<strong>pygenn-cuda</strong> → <a href="https://github.com/conda-forge/staged-recipes/pull/30899">staged-recipes PR #30899</a><ul>
+<li>GPU-accelerated build with modular CUDA support</li>
+<li>Targets Linux and Windows with reproducible CUDA environments</li>
+</ul>
+</li>
+<li>
+<strong>pygenn-cpu</strong> → <a href="https://github.com/conda-forge/staged-recipes/pull/30907">staged-recipes PR #30907</a><ul>
+<li>Lightweight CPU-only build</li>
+<li>Cross-platform support (Linux, Windows, macOS) without CUDA dependency</li>
+</ul>
+</li>
+</ul>
+<h4>🌐 Impact</h4>
+<ul>
+<li>
+<p>Brought <strong>PyGeNN to the Conda-Forge ecosystem</strong>, making installation as simple as:</p>
+<p><code>bash
+conda install -c conda-forge pygenn-cpu   # CPU-only
+conda install -c conda-forge pygenn-cuda  # CUDA-enabled</code>
+- Improved <strong>discoverability, reproducibility, and accessibility</strong> for neuroscience researchers and developers worldwide.</p>
+</li>
+</ul>
+<h3>🌟 Impact of the Package</h3>
+<p>Before our Conda-Forge packages, users had to <strong>install GeNN from source</strong>:<br>
+- Clone the repository<br>
+- Configure compilers and CUDA toolchains manually<br>
+- Build the C++ backend<br>
+- Troubleshoot platform-specific errors (Linux, Windows, macOS)  </p>
+<p>This process was <strong>time-consuming and error-prone</strong>, often taking <strong>hours</strong> for new users.</p>
+<h4>🚀 Improvements with Conda Packages</h4>
+<ul>
+<li>Installation reduced to a <strong>single command</strong>:<br><code>bash
+  conda install -c conda-forge pygenn-cpu   # CPU-only
+  conda install -c conda-forge pygenn-cuda  # CUDA-enabled</code>
+</li>
+<li>
+<strong>No manual compilation</strong> needed — all binaries are pre-built for the target platform</li>
+<li>
+<strong>Cross-platform availability</strong>: Linux, Windows, and macOS</li>
+<li>
+<strong>Pinned toolchains and CUDA versions</strong> ensure reproducibility and stability</li>
+<li>Eliminates setup barriers, letting researchers focus on <strong>science, not build systems</strong>
+</li>
+</ul>
+<h4>🔬 Impact on Researchers</h4>
+<ul>
+<li>Decreased installation time from <strong>hours → minutes</strong>
+</li>
+<li>Made GeNN accessible to <strong>a wider audience</strong>, including those without deep build/DevOps expertise</li>
+<li>Strengthened the reliability of <strong>neuroscience workflows</strong> by providing reproducible environments</li>
+</ul>
+<p>In short, this packaging effort turned GeNN from a <strong>complex source-based project</strong> into an <strong>accessible plug-and-play library</strong> for the neuroscience community!</p>
+    </div>
+    </article><article class="post h-entry post-text"><header><h1 class="post-title p-name"><a href="../posts/developing-an-ispc-backend-for-genn-bridging-gpu-and-cpu-performance-for-neural-network-simulations.html" class="u-url">Developing an ISPC Backend for GeNN: Bridging GPU and CPU Performance for Neural Network Simulations</a></h1>
         <div class="metadata">
             <span class="post-date dateline">
                 <time class="published dt-published" datetime="2025-09-17T13:45:49+01:00" title="2025-09-17 13:45">2025-09-17 13:45</time>
