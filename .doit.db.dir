@@ -99,7 +99,7 @@
 'render_sources:output\\tutorials.src.html', (111616, 247)
 'render_posts:cache\\pages\\tutorials.html', (116736, 362)
 'render_pages:output\\tutorials.html', (296960, 7309)
-'sitemap:output/sitemap.xml', (483840, 4702)
+'sitemap:output/sitemap.xml', (483840, 4703)
 'copy_assets:output/assets/js/html5shiv-printshiv.min.js', (372224, 1027)
 'scale_images:output/images/blog_08.png', (124416, 217)
 'render_sources:output/index.src.html', (124928, 239)
